@@ -11,7 +11,7 @@ struct RatingView: View {
 	
 	@Binding var rating: Int
 	
-	var label = ""
+	var label = "Rating"
 	
 	var maximumRating = 5
 	
@@ -34,7 +34,21 @@ struct RatingView: View {
 						.foregroundStyle(number > rating ? offColor : onColor)
 				}
 			}
-		}.buttonStyle(.plain)
+		}
+		.buttonStyle(.plain)
+		.accessibilityElement()
+		.accessibilityLabel(label)
+		.accessibilityValue(rating == 1 ? "1 star" : "\(rating) stars")
+		.accessibilityAdjustableAction { direction in
+			switch direction {
+			case .increment:
+				if rating < maximumRating { rating += 1 }
+			case .decrement:
+				if rating > 1 { rating -= 1 }
+			default:
+				break
+			}
+		}
     }
 	
 	func image(for number: Int) -> Image {
@@ -48,5 +62,5 @@ struct RatingView: View {
 }
 
 #Preview {
-	RatingView(rating: .constant(4))
+	RatingView(rating: .constant(2))
 }
